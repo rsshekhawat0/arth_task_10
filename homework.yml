@@ -1,0 +1,82 @@
+- hosts: all
+  tasks:
+    - yum_repository:
+       name: "docker-ce" 
+       state: present 
+       baseurl: "https://download.docker.com/linux/centos/7/x86_64/stable/" 
+       gpgcheck: no 
+       description: "docker"
+
+    - yum_repository:
+       name: "baseos" 
+       state: present 
+       baseurl: "file:///run/media/root/RHEL-8-0-0-BaseOS-x86_64/BaseOS" 
+       gpgcheck: no 
+       description: "baseos"
+    
+    - yum_repository:
+       name: "appstream" 
+       state: present 
+       baseurl: "file:///run/media/root/RHEL-8-0-0-BaseOS-x86_64/AppStream" 
+       gpgcheck: no 
+       description: "appstream"
+
+    - package:
+       name: "podman" 
+       state: absent
+
+    - package:
+       name: "docker-ce-18.06.3.ce-3el7" 
+       state: latest
+
+    
+    - service:
+       name: "docker"
+       state: "started"
+       enabled: yes
+
+    - pip:
+       name: "docker"
+       state: present
+
+    - pip:
+       name: "urllib3"
+       state: absent
+
+    - pip:
+       name: "urllib3"
+       state: present
+
+    - docker_image:
+       name: "httpd:latest"
+
+    - docker_container:
+       name: "rohan"
+       state: present
+       image: httpd:latest
+       ports: "8081:80"
+       volumes: /var/www/html:/usr/local/apache2/htdocs/
+
+    - copy:
+       src: "/index.html"
+       dest: "/var/www/html/"
+
+    - docker_container:
+       name: "rohan"
+       state: started
+
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
